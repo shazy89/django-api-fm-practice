@@ -33,10 +33,24 @@ def taskDetail(request, pk):
 	serializer = TaskSerializer(tasks, many=False)
 	#ipdb.set_trace()	
 	return Response(serializer.data)
-@api_view(['POST'])
-def taskDetail(request):
 
+@api_view(['POST'])
+def taskCreate(request):
 	serializer = TaskSerializer(data=request.data)
-	#ipdb.set_trace()	
+
+	if serializer.is_valid():
+		serializer.save()
+
 	return Response(serializer.data)
+
+@api_view(['POST'])
+def taskUpdate(request, pk):
+	task = Task.objects.get(id=pk)
+	serializer = TaskSerializer(instance=task, data=request.data)
+
+	if serializer.is_valid():
+		serializer.save()
+
+	return Response(serializer.data)
+
 
